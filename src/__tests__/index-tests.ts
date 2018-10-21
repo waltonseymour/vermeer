@@ -3,8 +3,8 @@ import { Vermeer } from "../index";
 const datasets = [[{ x: 2, y: 3 }, { x: 3, y: 23 }]];
 const canvasElement = {
   getContext: jest.fn(),
-  height: 20,
-  width: 20
+  height: 50,
+  width: 50
 };
 
 describe("Vermeer", () => {
@@ -25,5 +25,16 @@ describe("Vermeer", () => {
 
     expect(v.bounds("x")).toEqual([2, 3]);
     expect(v.bounds("y")).toEqual([3, 23]);
+  });
+
+  it("should scale correctly", () => {
+    const datasets = [[{ x: 0, y: 0 }, { x: 100, y: 100 }, { x: 20, y: 14 }]];
+    const v = new Vermeer({
+      datasets,
+      // @ts-ignore
+      canvasElement
+    });
+
+    expect(v.scale({ x: 20, y: 14 })).toEqual([10, 7]);
   });
 });
