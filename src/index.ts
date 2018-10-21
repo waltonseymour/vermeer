@@ -27,11 +27,11 @@ export class Vermeer {
     let max = Number.NEGATIVE_INFINITY;
     for (let dataset of this.datasets) {
       for (let d of dataset) {
-        if (d.x > max) {
+        if (d[property] > max) {
           max = d[property];
         }
 
-        if (d.x < min) {
+        if (d[property] < min) {
           min = d[property];
         }
       }
