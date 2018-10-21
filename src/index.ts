@@ -3,21 +3,22 @@ interface Datum {
   y: number;
 }
 
-interface FabricOptions {
+interface VermeerOptions {
+  canvasElement: HTMLCanvasElement;
   datasets: Datum[][];
 }
 
 /**
- * Fabric is a HTML Canvas based charting library
+ * Vermeer is a HTML Canvas based charting library
  */
-export class Fabric {
-  elt: HTMLCanvasElement;
+export class Vermeer {
+  canvasElement: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
   datasets: any[][];
 
-  constructor(options: FabricOptions) {
-    this.elt = document.createElement("canvas");
-    this.ctx = this.elt.getContext("2d");
+  constructor(options: VermeerOptions) {
+    this.canvasElement = options.canvasElement;
+    this.ctx = this.canvasElement.getContext("2d");
     this.datasets = options.datasets;
   }
 
