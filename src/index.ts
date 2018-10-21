@@ -48,6 +48,10 @@ export class Vermeer {
     return [min, max];
   }
 
+  /**
+   * scale returns the pixel location for a datum given the bounds and canvasElement dimmensions.
+   * @param d Datum to scale
+   */
   scale(d: Datum): [number, number] {
     const xPixels =
       ((d.x - this.xBounds[0]) / (this.xBounds[1] - this.xBounds[0])) *
@@ -60,5 +64,22 @@ export class Vermeer {
     return [Math.round(xPixels), Math.round(yPixels)];
   }
 
-  render() {}
+  clear() {
+    this.ctx.clearRect(
+      0,
+      0,
+      this.canvasElement.width,
+      this.canvasElement.height
+    );
+  }
+
+  render() {
+    this.clear();
+    for (let dataset of this.datasets) {
+      for (let d of dataset) {
+        const [x, y] = this.scale(d);
+        this.ctx.fillRect(x, y, 1, 1);
+      }
+    }
+  }
 }
