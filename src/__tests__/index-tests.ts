@@ -2,7 +2,12 @@ import { Vermeer } from "../index";
 
 const datasets = [[{ x: 2, y: 3 }, { x: 3, y: 23 }]];
 const canvasElement = {
-  getContext: jest.fn(),
+  getContext: () => ({
+    scale: jest.fn(),
+    clearRect: jest.fn(),
+    beginPath: jest.fn(),
+    fill: jest.fn()
+  }),
   height: 50,
   width: 50
 };
@@ -35,6 +40,6 @@ describe("Vermeer", () => {
       canvasElement
     });
 
-    expect(v.scale({ x: 20, y: 14 })).toEqual([10, 7]);
+    expect(v.scale({ x: 20, y: 14 })).toEqual([10, 50 - 7]);
   });
 });

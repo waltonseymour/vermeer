@@ -14,14 +14,24 @@ interface VermeerOptions {
 export class Vermeer {
   canvasElement: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
-  datasets: any[][];
+  datasets?: Datum[][];
   xBounds: [number, number];
   yBounds: [number, number];
 
   constructor(options: VermeerOptions) {
     this.canvasElement = options.canvasElement;
     this.ctx = this.canvasElement.getContext("2d");
-    this.datasets = options.datasets;
+    const dpi = window.devicePixelRatio || 1;
+    this.ctx.scale(dpi, dpi);
+    this.canvasElement.width *= dpi;
+    this.canvasElement.height *= dpi;
+    if (options.datasets) {
+      this.setDatasets(options.datasets);
+    }
+  }
+
+  setDatasets(d: Datum[][]) {
+    this.datasets = d;
     this.xBounds = this.bounds("x");
     this.yBounds = this.bounds("y");
   }
@@ -61,7 +71,10 @@ export class Vermeer {
       ((d.y - this.yBounds[0]) / (this.yBounds[1] - this.yBounds[0])) *
       this.canvasElement.height;
 
-    return [Math.round(xPixels), Math.round(yPixels)];
+    return [
+      Math.round(xPixels),
+      Math.round(this.canvasElement.height - yPixels)
+    ];
   }
 
   clear() {
@@ -75,6 +88,7 @@ export class Vermeer {
 
   render() {
     this.clear();
+    // TODO make this configurable
     this.ctx.fillStyle = "green";
     for (let dataset of this.datasets) {
       for (let d of dataset) {
