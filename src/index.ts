@@ -75,11 +75,16 @@ export class Vermeer {
 
   render() {
     this.clear();
+    this.ctx.fillStyle = "green";
     for (let dataset of this.datasets) {
       for (let d of dataset) {
         const [x, y] = this.scale(d);
-        this.ctx.fillRect(x, y, 1, 1);
+        this.ctx.beginPath();
+        this.ctx.arc(x, y, 2, 0, 2 * Math.PI);
+        this.ctx.fill();
       }
     }
   }
 }
+
+export default Vermeer;

@@ -6,6 +6,7 @@
   "private": true,
   "scripts": {
     "build": "webpack --mode production",
+    "start": "webpack --mode development --watch",
     "test": "jest"
   },
   "devDependencies": {
