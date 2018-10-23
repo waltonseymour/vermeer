@@ -1,18 +1,22 @@
 let canvasElement = document.getElementById("canvas");
 
-let datasets = [[]];
-for (let i = 0; i < 6000; i++) {
-  datasets[0].push({ x: i, y: Math.sin((i + j) / 10) });
-}
-let v = new vermeer.Vermeer({ canvasElement, datasets });
+let v = new vermeer.Vermeer({ canvasElement });
 
-var j = 1;
-setInterval(function() {
+var j = 400;
+
+function render() {
   let datasets = [[]];
-  for (let i = 0; i < 10000; i++) {
-    datasets[0].push({ x: i, y: Math.sin((i + 10 * j) / 50) });
+  for (let i = 0; i < 7000; i++) {
+    datasets[0].push({
+      x: i,
+      y: Math.sin((i + 10) / (0.1 * j)),
+      style: `rgb(${(i / 2) % 200}, ${(i / 5) % 200}, ${(i / 10) % 200})`
+    });
   }
   j++;
   v.setDatasets(datasets);
   v.render();
-});
+  requestAnimationFrame(render);
+}
+
+render();

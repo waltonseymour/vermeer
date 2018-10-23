@@ -5,6 +5,7 @@ const canvasElement = {
   getContext: () => ({
     scale: jest.fn(),
     clearRect: jest.fn(),
+    arc: jest.fn(),
     beginPath: jest.fn(),
     fill: jest.fn()
   }),

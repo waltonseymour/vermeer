@@ -1,6 +1,7 @@
 interface Datum {
   x: number;
   y: number;
+  style?: string;
 }
 
 interface VermeerOptions {
@@ -92,6 +93,9 @@ export class Vermeer {
     this.ctx.fillStyle = "green";
     for (let dataset of this.datasets) {
       for (let d of dataset) {
+        if (d.style) {
+          this.ctx.fillStyle = d.style;
+        }
         const [x, y] = this.scale(d);
         this.ctx.beginPath();
         this.ctx.arc(x, y, 2, 0, 2 * Math.PI);
