@@ -1,6 +1,12 @@
-import { Vermeer } from "../index";
+import { Vermeer, Dataset } from "../index";
 
-const datasets = [[{ x: 2, y: 3 }, { x: 3, y: 23 }]];
+const datasets: Dataset[] = [
+  {
+    type: "scatter",
+    data: [{ x: 2, y: 3 }, { x: 3, y: 23 }]
+  }
+];
+
 const canvasElement = {
   getContext: () => ({
     scale: jest.fn(),
@@ -34,7 +40,13 @@ describe("Vermeer", () => {
   });
 
   it("should scale correctly", () => {
-    const datasets = [[{ x: 0, y: 0 }, { x: 100, y: 100 }, { x: 20, y: 14 }]];
+    const datasets: Dataset[] = [
+      {
+        type: "scatter",
+        data: [{ x: 0, y: 0 }, { x: 100, y: 100 }, { x: 20, y: 14 }]
+      }
+    ];
+
     const v = new Vermeer({
       datasets,
       // @ts-ignore

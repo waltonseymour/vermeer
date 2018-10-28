@@ -4,9 +4,14 @@ interface Datum {
   style?: string;
 }
 
+export interface Dataset {
+  data: Datum[];
+  type: "scatter" | "line";
+}
+
 interface VermeerOptions {
   canvasElement: HTMLCanvasElement;
-  datasets: Datum[][];
+  datasets: Dataset[];
 }
 
 /**
@@ -15,7 +20,7 @@ interface VermeerOptions {
 export class Vermeer {
   canvasElement: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
-  datasets?: Datum[][];
+  datasets?: Dataset[];
   xBounds: [number, number];
   yBounds: [number, number];
 
@@ -31,7 +36,7 @@ export class Vermeer {
     }
   }
 
-  setDatasets(d: Datum[][]) {
+  setDatasets(d: Dataset[]) {
     this.datasets = d;
     this.xBounds = this.bounds("x");
     this.yBounds = this.bounds("y");
@@ -45,7 +50,7 @@ export class Vermeer {
     let min = Number.POSITIVE_INFINITY;
     let max = Number.NEGATIVE_INFINITY;
     for (let dataset of this.datasets) {
-      for (let d of dataset) {
+      for (let d of dataset.data) {
         if (d[property] > max) {
           max = d[property];
         }
@@ -87,19 +92,23 @@ export class Vermeer {
     );
   }
 
+  renderScatter(dataset: Dataset) {
+    for (let d of dataset.data) {
+      if (d.style) {
+        this.ctx.fillStyle = d.style;
+      }
+      const [x, y] = this.scale(d);
+      this.ctx.beginPath();
+      this.ctx.arc(x, y, 2, 0, 2 * Math.PI);
+      this.ctx.fill();
+    }
+  }
+
   render() {
     this.clear();
-    // TODO make this configurable
-    this.ctx.fillStyle = "green";
     for (let dataset of this.datasets) {
-      for (let d of dataset) {
-        if (d.style) {
-          this.ctx.fillStyle = d.style;
-        }
-        const [x, y] = this.scale(d);
-        this.ctx.beginPath();
-        this.ctx.arc(x, y, 2, 0, 2 * Math.PI);
-        this.ctx.fill();
+      if (dataset.type === "scatter") {
+        this.renderScatter(dataset);
       }
     }
   }
