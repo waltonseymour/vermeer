@@ -1,12 +1,12 @@
 interface Datum {
   x: number;
   y: number;
-  style?: string;
 }
 
 export interface Dataset {
   data: Datum[];
   type: "scatter" | "line";
+  style?: string;
 }
 
 interface VermeerOptions {
@@ -93,15 +93,28 @@ export class Vermeer {
   }
 
   renderScatter(dataset: Dataset) {
+    if (dataset.style) {
+      this.ctx.fillStyle = dataset.style;
+    }
     for (let d of dataset.data) {
-      if (d.style) {
-        this.ctx.fillStyle = d.style;
-      }
       const [x, y] = this.scale(d);
       this.ctx.beginPath();
-      this.ctx.arc(x, y, 2, 0, 2 * Math.PI);
+      this.ctx.arc(x, y, 3, 0, 2 * Math.PI);
       this.ctx.fill();
     }
+  }
+
+  renderLine(dataset: Dataset) {
+    if (dataset.style) {
+      this.ctx.strokeStyle = dataset.style;
+      this.ctx.lineWidth = 2;
+    }
+    this.ctx.beginPath();
+    for (let d of dataset.data) {
+      const [x, y] = this.scale(d);
+      this.ctx.lineTo(x, y);
+    }
+    this.ctx.stroke();
   }
 
   render() {
@@ -109,6 +122,8 @@ export class Vermeer {
     for (let dataset of this.datasets) {
       if (dataset.type === "scatter") {
         this.renderScatter(dataset);
+      } else {
+        this.renderLine(dataset);
       }
     }
   }
