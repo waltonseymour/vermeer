@@ -2,6 +2,7 @@
   "name": "vermeer",
   "version": "0.1.2",
   "main": "build/bundle.js",
+  "types": "build/index.d.ts",
   "license": "MIT",
   "private": false,
   "scripts": {

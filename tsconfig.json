@@ -5,7 +5,9 @@
     "module": "es6",
     "target": "es5",
     "jsx": "react",
-    "allowJs": true,
-    "esModuleInterop": true
-  }
+    "allowJs": false,
+    "esModuleInterop": true,
+    "declaration": true
+  },
+  "exclude": ["src/**/__tests__"]
 }

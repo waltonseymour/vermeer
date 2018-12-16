@@ -1,4 +1,4 @@
-import Vermeer, { Datum, Plot } from "./index";
+import { Datum, Plot } from "./index";
 
 interface InteractionOptions {
   plot: Plot;
@@ -6,7 +6,7 @@ interface InteractionOptions {
 }
 
 export class ClickInteraction {
-  plot: Vermeer;
+  plot: Plot;
   handler: (d: Datum) => void;
 
   constructor(options: InteractionOptions) {

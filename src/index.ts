@@ -13,8 +13,8 @@ export interface Dataset {
 
 interface PlotOptions {
   targetElement: HTMLDivElement;
-  datasets: Dataset[];
-  onClick: (d: Datum) => void;
+  datasets?: Dataset[];
+  onClick?: (d: Datum) => void;
 }
 
 /**
@@ -124,7 +124,7 @@ export class Plot {
     );
   }
 
-  renderScatter(dataset: Dataset) {
+  private renderScatter(dataset: Dataset) {
     if (dataset.style) {
       this.ctx.fillStyle = dataset.style;
     }
@@ -136,7 +136,7 @@ export class Plot {
     }
   }
 
-  renderLine(dataset: Dataset) {
+  private renderLine(dataset: Dataset) {
     if (dataset.style) {
       this.ctx.strokeStyle = dataset.style;
       this.ctx.lineWidth = 2;
