@@ -1,13 +1,9 @@
-# Java Gradle CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-java/ for more details
-#
 version: 2
 jobs:
   build-ts:
     docker:
       # specify the version
-      - image: circleci/node:8.12.0
+      - image: circleci/node:10.14.2
 
     steps:
       - add_ssh_keys:
@@ -15,8 +11,7 @@ jobs:
             - "de:be:02:a0:3e:9f:29:e0:38:1f:44:55:be:a5:3a:49"
       - checkout
 
-      # specify any bash command here prefixed with `run: `
-      - run: yarn
+      - run: yarn --pure-lockfile
       - run: yarn test
 
 workflows:
