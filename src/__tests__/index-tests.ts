@@ -1,4 +1,4 @@
-import { Vermeer, Dataset } from "../index";
+import { Plot, Dataset } from "../index";
 
 const datasets: Dataset[] = [
   {
@@ -15,7 +15,7 @@ const targetElement = {
 
 describe("Vermeer", () => {
   it("should initialize without error", () => {
-    new Vermeer({
+    new Plot({
       datasets,
       // @ts-ignore
       targetElement
@@ -23,7 +23,7 @@ describe("Vermeer", () => {
   });
 
   it("should compute bounds", () => {
-    const v = new Vermeer({
+    const v = new Plot({
       datasets,
       // @ts-ignore
       targetElement
@@ -41,7 +41,7 @@ describe("Vermeer", () => {
       }
     ];
 
-    const v = new Vermeer({
+    const v = new Plot({
       datasets,
       // @ts-ignore
       targetElement
@@ -50,8 +50,27 @@ describe("Vermeer", () => {
     expect(v.scale({ x: 20, y: 14 })).toEqual([10, 50 - 7]);
   });
 
+  it("should reverseScale correctly", () => {
+    const datasets: Dataset[] = [
+      {
+        type: "scatter",
+        data: [{ x: 0, y: 0 }, { x: 100, y: 100 }, { x: 20, y: 14 }]
+      }
+    ];
+
+    const v = new Plot({
+      datasets,
+      // @ts-ignore
+      targetElement
+    });
+
+    const translated = v.reverseScale([10, 50 - 7]);
+    expect(translated.x).toBeCloseTo(20);
+    expect(translated.y).toBeCloseTo(14);
+  });
+
   it("should cleanup canvas on destroy", () => {
-    const v = new Vermeer({
+    const v = new Plot({
       datasets,
       // @ts-ignore
       targetElement

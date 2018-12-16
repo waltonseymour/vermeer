@@ -1,4 +1,6 @@
-interface Datum {
+import { ClickInteraction } from "./interaction";
+
+export interface Datum {
   x: number;
   y: number;
 }
@@ -9,22 +11,24 @@ export interface Dataset {
   style?: string;
 }
 
-interface VermeerOptions {
+interface PlotOptions {
   targetElement: HTMLDivElement;
   datasets: Dataset[];
+  onClick: (d: Datum) => void;
 }
 
 /**
- * Vermeer is a HTML Canvas based charting library
+ * Plot is the top level class for vermeer
  */
-export class Vermeer {
+export class Plot {
   canvasElement: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
+  clickInteraction: ClickInteraction;
   datasets?: Dataset[];
   xBounds: [number, number];
   yBounds: [number, number];
 
-  constructor(options: VermeerOptions) {
+  constructor(options: PlotOptions) {
     this.canvasElement = document.createElement("canvas");
     options.targetElement.appendChild(this.canvasElement);
     this.ctx = this.canvasElement.getContext("2d");
@@ -34,6 +38,13 @@ export class Vermeer {
     this.canvasElement.height = options.targetElement.clientHeight * dpi;
     if (options.datasets) {
       this.setDatasets(options.datasets);
+    }
+
+    if (options.onClick) {
+      this.clickInteraction = new ClickInteraction({
+        plot: this,
+        handler: options.onClick
+      });
     }
   }
 
@@ -84,6 +95,26 @@ export class Vermeer {
     ];
   }
 
+  /**
+   * reverseScale returns the translated datum for a given pixel coordinate.
+   * @param d Datum to scale
+   */
+  reverseScale(d: [number, number]): Datum {
+    const x =
+      (d[0] / this.canvasElement.width) * (this.xBounds[1] - this.xBounds[0]) +
+      this.xBounds[0];
+
+    const y =
+      ((this.canvasElement.height - d[1]) / this.canvasElement.height) *
+        (this.yBounds[1] - this.yBounds[0]) +
+      this.yBounds[0];
+
+    return {
+      x,
+      y
+    };
+  }
+
   clear() {
     this.ctx.clearRect(
       0,
@@ -119,6 +150,9 @@ export class Vermeer {
   }
 
   destroy() {
+    if (this.clickInteraction) {
+      this.clickInteraction.destroy();
+    }
     this.canvasElement.remove();
   }
 
@@ -134,4 +168,4 @@ export class Vermeer {
   }
 }
 
-export default Vermeer;
+export default Plot;

@@ -1,6 +1,10 @@
 let targetElement = document.getElementById("canvas");
 
-let v = new vermeer.Vermeer({ targetElement });
+const onClick = d => {
+  console.log(d.y);
+};
+
+let v = new vermeer.Plot({ targetElement, onClick });
 
 fetch("https://api.iextrading.com/1.0/stock/aapl/chart/5y")
   .then(data => data.json())
