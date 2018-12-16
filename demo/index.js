@@ -1,6 +1,6 @@
-let canvasElement = document.getElementById("canvas");
+let targetElement = document.getElementById("canvas");
 
-let v = new vermeer.Vermeer({ canvasElement });
+let v = new vermeer.Vermeer({ targetElement });
 
 fetch("https://api.iextrading.com/1.0/stock/aapl/chart/5y")
   .then(data => data.json())
@@ -8,7 +8,7 @@ fetch("https://api.iextrading.com/1.0/stock/aapl/chart/5y")
     const datasets = [
       {
         type: "line",
-        style: "blue",
+        style: "green",
         data: data.map(d => {
           return { x: Date.parse(d.date), y: d.close };
         })

@@ -7,16 +7,10 @@ const datasets: Dataset[] = [
   }
 ];
 
-const canvasElement = {
-  getContext: () => ({
-    scale: jest.fn(),
-    clearRect: jest.fn(),
-    arc: jest.fn(),
-    beginPath: jest.fn(),
-    fill: jest.fn()
-  }),
-  height: 50,
-  width: 50
+const targetElement = {
+  appendChild: jest.fn(),
+  clientHeight: 50,
+  clientWidth: 50
 };
 
 describe("Vermeer", () => {
@@ -24,7 +18,7 @@ describe("Vermeer", () => {
     new Vermeer({
       datasets,
       // @ts-ignore
-      canvasElement
+      targetElement
     });
   });
 
@@ -32,7 +26,7 @@ describe("Vermeer", () => {
     const v = new Vermeer({
       datasets,
       // @ts-ignore
-      canvasElement
+      targetElement
     });
 
     expect(v.bounds("x")).toEqual([2, 3]);
@@ -50,7 +44,7 @@ describe("Vermeer", () => {
     const v = new Vermeer({
       datasets,
       // @ts-ignore
-      canvasElement
+      targetElement
     });
 
     expect(v.scale({ x: 20, y: 14 })).toEqual([10, 50 - 7]);

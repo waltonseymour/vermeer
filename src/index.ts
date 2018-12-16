@@ -10,7 +10,7 @@ export interface Dataset {
 }
 
 interface VermeerOptions {
-  canvasElement: HTMLCanvasElement;
+  targetElement: HTMLDivElement;
   datasets: Dataset[];
 }
 
@@ -25,12 +25,13 @@ export class Vermeer {
   yBounds: [number, number];
 
   constructor(options: VermeerOptions) {
-    this.canvasElement = options.canvasElement;
+    this.canvasElement = document.createElement("canvas");
+    options.targetElement.appendChild(this.canvasElement);
     this.ctx = this.canvasElement.getContext("2d");
     const dpi = window.devicePixelRatio || 1;
     this.ctx.scale(dpi, dpi);
-    this.canvasElement.width *= dpi;
-    this.canvasElement.height *= dpi;
+    this.canvasElement.width = options.targetElement.clientWidth * dpi;
+    this.canvasElement.height = options.targetElement.clientHeight * dpi;
     if (options.datasets) {
       this.setDatasets(options.datasets);
     }
@@ -115,6 +116,10 @@ export class Vermeer {
       this.ctx.lineTo(x, y);
     }
     this.ctx.stroke();
+  }
+
+  destroy() {
+    this.canvasElement.remove();
   }
 
   render() {
