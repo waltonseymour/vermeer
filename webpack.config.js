@@ -16,6 +16,7 @@ module.exports = {
   },
   output: {
     filename: "bundle.js",
+    libraryTarget: "umd",
     library: "vermeer",
     path: path.resolve(__dirname, "build")
   }
