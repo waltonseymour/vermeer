@@ -49,4 +49,17 @@ describe("Vermeer", () => {
 
     expect(v.scale({ x: 20, y: 14 })).toEqual([10, 50 - 7]);
   });
+
+  it("should cleanup canvas on destroy", () => {
+    const v = new Vermeer({
+      datasets,
+      // @ts-ignore
+      targetElement
+    });
+
+    v.canvasElement.remove = jest.fn();
+    v.destroy();
+
+    expect(v.canvasElement.remove.mock.calls.length).toEqual(1);
+  });
 });
