@@ -1,9 +1,12 @@
 {
   "name": "vermeer",
-  "version": "1.0.0",
+  "version": "0.1.1",
   "main": "index.js",
   "license": "MIT",
-  "private": true,
+  "private": false,
+  "files": [
+    "build/*"
+  ],
   "scripts": {
     "build": "webpack --mode production",
     "start": "webpack --mode development --watch",
