@@ -27,15 +27,17 @@ export class Plot {
   datasets?: Dataset[];
   xBounds: [number, number];
   yBounds: [number, number];
+  dpi: number;
 
   constructor(options: PlotOptions) {
     this.canvasElement = document.createElement("canvas");
     options.targetElement.appendChild(this.canvasElement);
     this.ctx = this.canvasElement.getContext("2d");
-    const dpi = window.devicePixelRatio || 1;
-    this.ctx.scale(dpi, dpi);
-    this.canvasElement.width = options.targetElement.clientWidth * dpi;
-    this.canvasElement.height = options.targetElement.clientHeight * dpi;
+    this.dpi = window.devicePixelRatio || 1;
+    this.ctx.scale(this.dpi, this.dpi);
+    this.canvasElement.width = options.targetElement.clientWidth * this.dpi;
+    this.canvasElement.style.width = "100%";
+    this.canvasElement.height = options.targetElement.clientHeight * this.dpi;
     if (options.datasets) {
       this.setDatasets(options.datasets);
     }
@@ -100,6 +102,8 @@ export class Plot {
    * @param d Datum to scale
    */
   reverseScale(d: [number, number]): Datum {
+    d = [d[0] * this.dpi, d[1] * this.dpi];
+
     const x =
       (d[0] / this.canvasElement.width) * (this.xBounds[1] - this.xBounds[0]) +
       this.xBounds[0];
