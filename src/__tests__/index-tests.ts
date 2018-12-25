@@ -22,53 +22,6 @@ describe("Vermeer", () => {
     });
   });
 
-  it("should compute bounds", () => {
-    const v = new Plot({
-      datasets,
-      // @ts-ignore
-      targetElement
-    });
-
-    expect(v.bounds("x")).toEqual([2, 3]);
-    expect(v.bounds("y")).toEqual([3, 23]);
-  });
-
-  it("should scale correctly", () => {
-    const datasets: Dataset[] = [
-      {
-        type: "scatter",
-        data: [{ x: 0, y: 0 }, { x: 100, y: 100 }, { x: 20, y: 14 }]
-      }
-    ];
-
-    const v = new Plot({
-      datasets,
-      // @ts-ignore
-      targetElement
-    });
-
-    expect(v.scale({ x: 20, y: 14 })).toEqual([10, 50 - 7]);
-  });
-
-  it("should reverseScale correctly", () => {
-    const datasets: Dataset[] = [
-      {
-        type: "scatter",
-        data: [{ x: 0, y: 0 }, { x: 100, y: 100 }, { x: 20, y: 14 }]
-      }
-    ];
-
-    const v = new Plot({
-      datasets,
-      // @ts-ignore
-      targetElement
-    });
-
-    const translated = v.reverseScale([10, 50 - 7]);
-    expect(translated.x).toBeCloseTo(20);
-    expect(translated.y).toBeCloseTo(14);
-  });
-
   it("should cleanup canvas on destroy", () => {
     const v = new Plot({
       datasets,

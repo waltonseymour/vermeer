@@ -36,7 +36,7 @@ export class Axis {
     return [min, max];
   }
 
-  setDomain(values: number[]) {
+  setDomainFromValues(values: number[]) {
     this.domain = this.extentOfValues(values);
   }
 

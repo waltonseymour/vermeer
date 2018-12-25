@@ -70,12 +70,12 @@ export class Plot {
     const xValues = d
       .map(x => x.data.map(v => v.x))
       .reduce((acc, val) => acc.concat(val), []);
-    this.xAxis.setDomain(xValues);
+    this.xAxis.setDomainFromValues(xValues);
 
     const yValues = d
       .map(x => x.data.map(v => v.y))
       .reduce((acc, val) => acc.concat(val), []);
-    this.yAxis.setDomain(yValues);
+    this.yAxis.setDomainFromValues(yValues);
   }
 
   clear() {
