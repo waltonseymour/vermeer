@@ -16,7 +16,9 @@ export class ClickInteraction {
   }
 
   handle = (e: MouseEvent) => {
-    this.handler(this.plot.reverseScale([e.x, e.y]));
+    const x = this.plot.xAxis.reverseScale(e.x);
+    const y = this.plot.yAxis.reverseScale(e.y);
+    this.handler({ x, y });
   };
 
   destroy() {
