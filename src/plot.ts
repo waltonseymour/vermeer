@@ -25,7 +25,7 @@ export class Plot {
   canvasElement: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
   clickInteraction: ClickInteraction;
-  datasets?: Dataset[];
+  datasets?: Dataset[] = [];
   xAxis: Axis;
   yAxis: Axis;
   dpi: number;
@@ -65,17 +65,26 @@ export class Plot {
     }
   }
 
-  setDatasets(d: Dataset[]) {
-    this.datasets = d;
-    const xValues = d
+  private onDatasetChange() {
+    const xValues = this.datasets
       .map(x => x.data.map(v => v.x))
       .reduce((acc, val) => acc.concat(val), []);
     this.xAxis.setDomainFromValues(xValues);
 
-    const yValues = d
+    const yValues = this.datasets
       .map(x => x.data.map(v => v.y))
       .reduce((acc, val) => acc.concat(val), []);
     this.yAxis.setDomainFromValues(yValues);
+  }
+
+  addDataset(d: Dataset) {
+    this.datasets.push(d);
+    this.onDatasetChange();
+  }
+
+  setDatasets(d: Dataset[]) {
+    this.datasets = d;
+    this.onDatasetChange();
   }
 
   clear() {
