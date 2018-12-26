@@ -1,4 +1,4 @@
-import { Datum, Plot } from "./index";
+import { Datum, Plot } from "./plot";
 
 interface InteractionOptions {
   plot: Plot;
