@@ -123,8 +123,8 @@ export class Chart {
    * @param style
    */
   private setStyle(style: Style) {
-    if (style.fillStyle) {
-      this.ctx.strokeStyle = style.fillStyle;
+    if (style.strokeStyle) {
+      this.ctx.strokeStyle = style.strokeStyle;
     }
     if (style.strokeWidth) {
       this.ctx.lineWidth = style.strokeWidth;
