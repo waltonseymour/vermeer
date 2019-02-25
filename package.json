@@ -11,7 +11,8 @@
   "scripts": {
     "build": "webpack --mode production",
     "start": "webpack --mode development --watch",
-    "test": "jest"
+    "test": "jest",
+    "prepack": "npm run build"
   },
   "devDependencies": {
     "@types/jest": "^23.3.5",
