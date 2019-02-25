@@ -1,10 +1,11 @@
 {
   "name": "vermeer",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "main": "build/bundle.js",
   "types": "build/index.d.ts",
   "license": "MIT",
   "private": false,
+  "files": ["build"],
   "scripts": {
     "build": "webpack --mode production",
     "start": "webpack --mode development --watch",
