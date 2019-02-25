@@ -1,6 +1,6 @@
-import { Plot, Dataset } from "../index";
+import { Chart, Plot } from "../index";
 
-const datasets: Dataset[] = [
+const plots: Plot[] = [
   {
     type: "scatter",
     data: [{ x: 2, y: 3 }, { x: 3, y: 23 }]
@@ -15,16 +15,16 @@ const targetElement = {
 
 describe("Vermeer", () => {
   it("should initialize without error", () => {
-    new Plot({
-      datasets,
+    new Chart({
+      plots,
       // @ts-ignore
       targetElement
     });
   });
 
   it("should cleanup canvas on destroy", () => {
-    const v = new Plot({
-      datasets,
+    const v = new Chart({
+      plots,
       // @ts-ignore
       targetElement
     });

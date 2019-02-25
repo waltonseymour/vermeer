@@ -1,12 +1,12 @@
-import { Datum, Plot } from "./plot";
+import { Datum, Chart } from "./chart";
 
 interface InteractionOptions {
-  plot: Plot;
+  plot: Chart;
   handler: (point: Datum) => void;
 }
 
 export class ClickInteraction {
-  plot: Plot;
+  plot: Chart;
   handler: (d: Datum) => void;
 
   constructor(options: InteractionOptions) {

@@ -13,31 +13,38 @@ export interface Style {
   fillStyle?: string;
 }
 
-export interface Dataset {
+/**
+ * Plot is an object that represents a dataset and how to visualize it
+ */
+export interface Plot {
   data: Datum[];
   type: "scatter" | "line";
   style?: Style;
 }
 
-interface PlotOptions {
+/**
+ * ChartOptions describes the options needed to initalize a Chart
+ */
+interface ChartOptions {
   targetElement: HTMLDivElement;
-  datasets?: Dataset[];
+  plots?: Plot[];
   onClick?: (d: Datum) => void;
 }
 
 /**
- * Plot is the top level class for vermeer
+ * Chart is the top level object for interacting with vermeer
+ * @example const myChart = new Chart(options)
  */
-export class Plot {
+export class Chart {
   canvasElement: HTMLCanvasElement;
   private ctx: CanvasRenderingContext2D;
   private clickInteraction: ClickInteraction;
-  private datasets?: Dataset[] = [];
+  private plots?: Plot[] = [];
   xAxis: Axis;
   yAxis: Axis;
   private dpi: number;
 
-  constructor(options: PlotOptions) {
+  constructor(options: ChartOptions) {
     this.canvasElement = document.createElement("canvas");
     options.targetElement.appendChild(this.canvasElement);
     this.ctx = this.canvasElement.getContext("2d");
@@ -60,8 +67,8 @@ export class Plot {
       orientation: "y"
     });
 
-    if (options.datasets) {
-      this.setDatasets(options.datasets);
+    if (options.plots) {
+      this.setPlots(options.plots);
     }
 
     if (options.onClick) {
@@ -72,29 +79,37 @@ export class Plot {
     }
   }
 
-  private onDatasetChange() {
-    const xValues = this.datasets
+  private onPlotChange() {
+    const xValues = this.plots
       .map(x => x.data.map(v => v.x))
       .reduce((acc, val) => acc.concat(val), []);
     this.xAxis.setDomainFromValues(xValues);
 
-    const yValues = this.datasets
+    const yValues = this.plots
       .map(x => x.data.map(v => v.y))
       .reduce((acc, val) => acc.concat(val), []);
     this.yAxis.setDomainFromValues(yValues);
   }
 
-  addDataset(d: Dataset) {
-    this.datasets.push(d);
-    this.onDatasetChange();
+  /**
+   * Add a plot to the Chart
+   * @param p the Plot to add
+   */
+  addPlot(p: Plot) {
+    this.plots.push(p);
+    this.onPlotChange();
   }
 
-  setDatasets(d: Dataset[]) {
-    this.datasets = d;
-    this.onDatasetChange();
+  /**
+   * Set the plots for the Chart
+   * @param p the Plots to be set
+   */
+  setPlots(p: Plot[]) {
+    this.plots = p;
+    this.onPlotChange();
   }
 
-  clear() {
+  private clear() {
     this.ctx.clearRect(
       0,
       0,
@@ -122,11 +137,11 @@ export class Plot {
     }
   }
 
-  private renderScatter(dataset: Dataset) {
-    if (dataset.style) {
-      this.setStyle(dataset.style);
+  private renderScatter(plot: Plot) {
+    if (plot.style) {
+      this.setStyle(plot.style);
     }
-    for (let d of dataset.data) {
+    for (let d of plot.data) {
       const x = this.xAxis.scale(d.x);
       const y = this.yAxis.scale(d.y);
       this.ctx.beginPath();
@@ -135,12 +150,12 @@ export class Plot {
     }
   }
 
-  private renderLine(dataset: Dataset) {
-    if (dataset.style) {
-      this.setStyle(dataset.style);
+  private renderLine(plot: Plot) {
+    if (plot.style) {
+      this.setStyle(plot.style);
     }
     this.ctx.beginPath();
-    for (let d of dataset.data) {
+    for (let d of plot.data) {
       const x = this.xAxis.scale(d.x);
       const y = this.yAxis.scale(d.y);
       this.ctx.lineTo(x, y);
@@ -148,6 +163,9 @@ export class Plot {
     this.ctx.stroke();
   }
 
+  /**
+   * destroy will clean up all resources used for the Chart
+   */
   destroy() {
     if (this.clickInteraction) {
       this.clickInteraction.destroy();
@@ -155,16 +173,19 @@ export class Plot {
     this.canvasElement.remove();
   }
 
+  /**
+   * render will draw the Chart to the canvas
+   */
   render() {
     this.clear();
-    for (let dataset of this.datasets) {
-      if (dataset.type === "scatter") {
-        this.renderScatter(dataset);
+    for (let plot of this.plots) {
+      if (plot.type === "scatter") {
+        this.renderScatter(plot);
       } else {
-        this.renderLine(dataset);
+        this.renderLine(plot);
       }
     }
   }
 }
 
-export default Plot;
+export default Chart;
