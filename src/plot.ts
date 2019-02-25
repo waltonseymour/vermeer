@@ -6,10 +6,17 @@ export interface Datum {
   y: number;
 }
 
+export interface Style {
+  strokeStyle?: string;
+  strokeDashArray?: number[];
+  strokeWidth: number;
+  fillStyle?: string;
+}
+
 export interface Dataset {
   data: Datum[];
   type: "scatter" | "line";
-  style?: string;
+  style?: Style;
 }
 
 interface PlotOptions {
@@ -23,12 +30,12 @@ interface PlotOptions {
  */
 export class Plot {
   canvasElement: HTMLCanvasElement;
-  ctx: CanvasRenderingContext2D;
-  clickInteraction: ClickInteraction;
-  datasets?: Dataset[] = [];
+  private ctx: CanvasRenderingContext2D;
+  private clickInteraction: ClickInteraction;
+  private datasets?: Dataset[] = [];
   xAxis: Axis;
   yAxis: Axis;
-  dpi: number;
+  private dpi: number;
 
   constructor(options: PlotOptions) {
     this.canvasElement = document.createElement("canvas");
@@ -96,9 +103,28 @@ export class Plot {
     );
   }
 
+  /**
+   * Modifies canvas context to match the style object
+   * @param style
+   */
+  private setStyle(style: Style) {
+    if (style.fillStyle) {
+      this.ctx.strokeStyle = style.fillStyle;
+    }
+    if (style.strokeWidth) {
+      this.ctx.lineWidth = style.strokeWidth;
+    }
+    if (style.fillStyle) {
+      this.ctx.fillStyle = style.fillStyle;
+    }
+    if (style.strokeDashArray) {
+      this.ctx.setLineDash(style.strokeDashArray);
+    }
+  }
+
   private renderScatter(dataset: Dataset) {
     if (dataset.style) {
-      this.ctx.fillStyle = dataset.style;
+      this.setStyle(dataset.style);
     }
     for (let d of dataset.data) {
       const x = this.xAxis.scale(d.x);
@@ -111,8 +137,7 @@ export class Plot {
 
   private renderLine(dataset: Dataset) {
     if (dataset.style) {
-      this.ctx.strokeStyle = dataset.style;
-      this.ctx.lineWidth = 2;
+      this.setStyle(dataset.style);
     }
     this.ctx.beginPath();
     for (let d of dataset.data) {
