@@ -33,7 +33,8 @@ export class Axis {
       }
     }
 
-    return [min, max];
+    const buffer = (max - min) * 0.02;
+    return [min - buffer, max + buffer];
   }
 
   setDomainFromValues(values: number[]) {
